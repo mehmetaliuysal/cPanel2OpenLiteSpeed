@@ -418,10 +418,12 @@ EOD;
             $cloudFlareApi = new CloudflareAPI($this->cloudflareAPIKey, $this->cloudflareEmail);
             $update = $cloudFlareApi->upsertDNSARecord($this->cpanelMainDomain, $this->cloudflareADNSRecordValue);
 
-            if ($update['status']) {
-                echo "{$this->green}DNS record updated successfully.{$this->reset}\n";
-            } else {
-                echo "{$this->red}There was an error updating DNS record:" . $update['message'] . "{$this->reset}\n";
+             foreach($update as $response){
+                if ($response['status']) {
+                    echo "{$this->green}DNS record updated successfully.{$this->reset}\n";
+                }else{
+                    echo "{$this->red}There was an error updating DNS record:" . $update['message'] . "{$this->reset}\n";
+                }
             }
 
             $update = $cloudFlareApi->setSSLMode($this->cpanelMainDomain, 'full');
