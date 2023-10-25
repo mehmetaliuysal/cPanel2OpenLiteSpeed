@@ -1,6 +1,17 @@
 # cPanel2OpenLiteSpeed
 This script is used to migrate the application layer from one cPanel and Apache or OpenLiteSpeed server to another. 
 
+The script then checks for the existence of user accounts and groups on the cPanel server and creates them if they do not exist on the remote server.
+Next, it creates the directory for migration on the remote server using SSH and sets ownership. It transfers files using rsync and assigns ownership to the transferred files.
+It creates the vhost.conf file in OpenLiteSpeed based on the arguments in the transfer.conf file and creates a virtual host definition in the httpd.conf main configuration file with the cPanel username.
+It then checks for the existence of listeners in OpenLiteSpeed, and if listeners for port 443 or 8080 do not exist, it creates them. If listeners already exist, it adds mapping entries for virtual hosts to the listeners based on the main domain name.
+Next, it creates a Bash script on the remote server to fix any htaccess incompatibilities and updates the htaccess file by running the created script.
+If there are Cloudflare settings in the transfer.conf file, it updates the A records in Cloudflare with the target server's external IP address. Additionally, if Cloudflare settings are present, it changes the SSL mode to "FULL".
+Finally, it gracefully restarts OpenLiteSpeed on the remote server.
+The application migration process is successfully completed with these steps.
+
+
+
 ## Explanation of `transfer.conf` Arguments
 
 The `transfer.conf` file contains the arguments used during the application migration process. Below are explanations of these arguments:
